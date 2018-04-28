@@ -55,14 +55,15 @@ func NewABitOfEverythingServiceApiWithBasePath(basePath string) *ABitOfEverythin
  * @param sfixed64Value 
  * @param sint32Value 
  * @param sint64Value 
+ * @param oneofString 
  * @param nonConventionalNameValue 
  * @return *ExamplepbABitOfEverything
  */
-func (a ABitOfEverythingServiceApi) Create(floatValue float32, doubleValue float64, int64Value string, uint64Value string, int32Value int32, fixed64Value string, fixed32Value int64, boolValue bool, stringValue string, uint32Value int64, sfixed32Value int32, sfixed64Value string, sint32Value int32, sint64Value string, nonConventionalNameValue string) (*ExamplepbABitOfEverything, *APIResponse, error) {
+func (a ABitOfEverythingServiceApi) Create(floatValue float32, doubleValue float64, int64Value string, uint64Value string, int32Value int32, fixed64Value string, fixed32Value int64, boolValue bool, stringValue string, uint32Value int64, sfixed32Value int32, sfixed64Value string, sint32Value int32, sint64Value string, oneofString string, nonConventionalNameValue string) (*ExamplepbABitOfEverything, *APIResponse, error) {
 
 	var localVarHttpMethod = strings.ToUpper("Post")
 	// create path and map variables
-	localVarPath := a.Configuration.BasePath + "/v1/example/a_bit_of_everything/{float_value}/{double_value}/{int64_value}/separator/{uint64_value}/{int32_value}/{fixed64_value}/{fixed32_value}/{bool_value}/{string_value}/{uint32_value}/{sfixed32_value}/{sfixed64_value}/{sint32_value}/{sint64_value}/{nonConventionalNameValue}"
+	localVarPath := a.Configuration.BasePath + "/v1/example/a_bit_of_everything/{float_value}/{double_value}/{int64_value}/separator/{uint64_value}/{int32_value}/{fixed64_value}/{fixed32_value}/{bool_value}/{string_value}/{uint32_value}/{sfixed32_value}/{sfixed64_value}/{sint32_value}/{sint64_value}/{oneof_string}/{nonConventionalNameValue}"
 	localVarPath = strings.Replace(localVarPath, "{"+"float_value"+"}", fmt.Sprintf("%v", floatValue), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"double_value"+"}", fmt.Sprintf("%v", doubleValue), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"int64_value"+"}", fmt.Sprintf("%v", int64Value), -1)
@@ -77,6 +78,7 @@ func (a ABitOfEverythingServiceApi) Create(floatValue float32, doubleValue float
 	localVarPath = strings.Replace(localVarPath, "{"+"sfixed64_value"+"}", fmt.Sprintf("%v", sfixed64Value), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"sint32_value"+"}", fmt.Sprintf("%v", sint32Value), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"sint64_value"+"}", fmt.Sprintf("%v", sint64Value), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"oneof_string"+"}", fmt.Sprintf("%v", oneofString), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"nonConventionalNameValue"+"}", fmt.Sprintf("%v", nonConventionalNameValue), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -280,6 +282,81 @@ func (a ABitOfEverythingServiceApi) DeepPathEcho(singleNestedName string, body E
 	var localVarURL, _ = url.Parse(localVarPath)
 	localVarURL.RawQuery = localVarQueryParams.Encode()
 	var localVarAPIResponse = &APIResponse{Operation: "DeepPathEcho", Method: localVarHttpMethod, RequestURL: localVarURL.String()}
+	if localVarHttpResponse != nil {
+		localVarAPIResponse.Response = localVarHttpResponse.RawResponse
+		localVarAPIResponse.Payload = localVarHttpResponse.Body()
+	}
+
+	if err != nil {
+		return successPayload, localVarAPIResponse, err
+	}
+	err = json.Unmarshal(localVarHttpResponse.Body(), &successPayload)
+	return successPayload, localVarAPIResponse, err
+}
+
+/**
+ * 
+ *
+ * @param body 
+ * @return *ExamplepbABitOfEverything
+ */
+func (a ABitOfEverythingServiceApi) DeepPathEcho2(body string) (*ExamplepbABitOfEverything, *APIResponse, error) {
+
+	var localVarHttpMethod = strings.ToUpper("Post")
+	// create path and map variables
+	localVarPath := a.Configuration.BasePath + "/v2/example/oneof/echo"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := make(map[string]string)
+	var localVarPostBody interface{}
+	var localVarFileName string
+	var localVarFileBytes []byte
+	// authentication '(OAuth2)' required
+	// oauth required
+	if a.Configuration.AccessToken != ""{
+		localVarHeaderParams["Authorization"] =  "Bearer " + a.Configuration.AccessToken
+	}
+	// authentication '(BasicAuth)' required
+	// http basic authentication required
+	if a.Configuration.Username != "" || a.Configuration.Password != ""{
+		localVarHeaderParams["Authorization"] =  "Basic " + a.Configuration.GetBasicAuthEncodedString()
+	}
+	// authentication '(ApiKeyAuth)' required
+	// set key with prefix in header
+	localVarHeaderParams["X-API-Key"] = a.Configuration.GetAPIKeyWithPrefix("X-API-Key")
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		localVarHeaderParams[key] = a.Configuration.DefaultHeader[key]
+	}
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json", "application/x-foo-mime",  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+		"application/x-foo-mime",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	// body params
+	localVarPostBody = &body
+	var successPayload = new(ExamplepbABitOfEverything)
+	localVarHttpResponse, err := a.Configuration.APIClient.CallAPI(localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
+
+	var localVarURL, _ = url.Parse(localVarPath)
+	localVarURL.RawQuery = localVarQueryParams.Encode()
+	var localVarAPIResponse = &APIResponse{Operation: "DeepPathEcho2", Method: localVarHttpMethod, RequestURL: localVarURL.String()}
 	if localVarHttpResponse != nil {
 		localVarAPIResponse.Response = localVarHttpResponse.RawResponse
 		localVarAPIResponse.Payload = localVarHttpResponse.Body()
