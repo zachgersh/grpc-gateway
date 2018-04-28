@@ -206,7 +206,7 @@ func request_ABitOfEverythingService_Create_0(ctx context.Context, marshaler run
 	}
 
 	func() *ABitOfEverything_OneofValueString {
-		msg := &protoReq
+		msg := (&protoReq)
 		oneof := msg.OneofValue
 		if _, ok := oneof.(*ABitOfEverything_OneofValueString); oneof == nil || !ok {
 			oneof = new(ABitOfEverything_OneofValueString)
@@ -243,7 +243,7 @@ func request_ABitOfEverythingService_CreateBody_0(ctx context.Context, marshaler
 	var protoReq ABitOfEverything
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode((&protoReq)); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -283,7 +283,7 @@ func request_ABitOfEverythingService_Update_0(ctx context.Context, marshaler run
 	var protoReq ABitOfEverything
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode((&protoReq)); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -403,7 +403,7 @@ func request_ABitOfEverythingService_Echo_1(ctx context.Context, marshaler runti
 	var protoReq sub.StringMessage
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.Value); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(protoReq.Value); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -433,7 +433,7 @@ func request_ABitOfEverythingService_DeepPathEcho_0(ctx context.Context, marshal
 	var protoReq ABitOfEverything
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode((&protoReq)); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -469,7 +469,7 @@ func request_ABitOfEverythingService_DeepPathEcho_1(ctx context.Context, marshal
 	var metadata runtime.ServerMetadata
 
 	if err := marshaler.NewDecoder(req.Body).Decode(&func() *ABitOfEverything_OneofValueString {
-		msg := &protoReq
+		msg := (&protoReq)
 		oneof := msg.OneofValue
 		if _, ok := oneof.(*ABitOfEverything_OneofValueString); oneof == nil || !ok {
 			oneof = new(ABitOfEverything_OneofValueString)
@@ -497,15 +497,16 @@ func request_ABitOfEverythingService_DeepPathEcho_2(ctx context.Context, marshal
 	var protoReq ABitOfEverything
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&func() *ABitOfEverything_OneofValueNested {
-		msg := &protoReq
-		oneof := msg.OneofValue
-		if _, ok := oneof.(*ABitOfEverything_OneofValueNested); oneof == nil || !ok {
-			oneof = new(ABitOfEverything_OneofValueNested)
-			msg.OneofValue = oneof
-		}
-		return oneof.(*ABitOfEverything_OneofValueNested)
-	}().OneofValueNested); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(
+		func() *ABitOfEverything_OneofValueNested {
+			msg := (&protoReq)
+			oneof := msg.OneofValue
+			if _, ok := oneof.(*ABitOfEverything_OneofValueNested); oneof == nil || !ok {
+				oneof = new(ABitOfEverything_OneofValueNested)
+				msg.OneofValue = oneof
+			}
+			return oneof.(*ABitOfEverything_OneofValueNested)
+		}().OneofValueNested); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -527,15 +528,16 @@ func request_ABitOfEverythingService_DeepPathEcho_3(ctx context.Context, marshal
 	var metadata runtime.ServerMetadata
 
 	if err := marshaler.NewDecoder(req.Body).Decode(&func() *ABitOfEverything_Nested_TerminalValue {
-		msg := &func() *ABitOfEverything_OneofValueNested {
-			msg := &protoReq
-			oneof := msg.OneofValue
-			if _, ok := oneof.(*ABitOfEverything_OneofValueNested); oneof == nil || !ok {
-				oneof = new(ABitOfEverything_OneofValueNested)
-				msg.OneofValue = oneof
-			}
-			return oneof.(*ABitOfEverything_OneofValueNested)
-		}().OneofValueNested
+		msg :=
+			func() *ABitOfEverything_OneofValueNested {
+				msg := (&protoReq)
+				oneof := msg.OneofValue
+				if _, ok := oneof.(*ABitOfEverything_OneofValueNested); oneof == nil || !ok {
+					oneof = new(ABitOfEverything_OneofValueNested)
+					msg.OneofValue = oneof
+				}
+				return oneof.(*ABitOfEverything_OneofValueNested)
+			}().OneofValueNested
 		oneof := msg.OneofValue
 		if _, ok := oneof.(*ABitOfEverything_Nested_TerminalValue); oneof == nil || !ok {
 			oneof = new(ABitOfEverything_Nested_TerminalValue)
@@ -577,7 +579,7 @@ func request_ABitOfEverythingService_GetMessageWithBody_0(ctx context.Context, m
 	var protoReq MessageWithBody
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq.Data); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode(protoReq.Data); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -608,7 +610,7 @@ func request_ABitOfEverythingService_PostWithEmptyBody_0(ctx context.Context, ma
 	var protoReq Body
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode((&protoReq)); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 

@@ -152,7 +152,7 @@ func request_EchoService_Echo_2(ctx context.Context, marshaler runtime.Marshaler
 	}
 
 	func() *SimpleMessage_Lang {
-		msg := &protoReq
+		msg := (&protoReq)
 		oneof := msg.Code
 		if _, ok := oneof.(*SimpleMessage_Lang); oneof == nil || !ok {
 			oneof = new(SimpleMessage_Lang)
@@ -206,7 +206,7 @@ func request_EchoService_Echo_3(ctx context.Context, marshaler runtime.Marshaler
 	}
 
 	func() *SimpleMessage_LineNum {
-		msg := &protoReq
+		msg := (&protoReq)
 		oneof := msg.Code
 		if _, ok := oneof.(*SimpleMessage_LineNum); oneof == nil || !ok {
 			oneof = new(SimpleMessage_LineNum)
@@ -278,7 +278,7 @@ func request_EchoService_EchoBody_0(ctx context.Context, marshaler runtime.Marsh
 	var protoReq SimpleMessage
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	if err := marshaler.NewDecoder(req.Body).Decode((&protoReq)); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 

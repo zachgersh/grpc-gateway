@@ -201,6 +201,15 @@ type Field struct {
 	*descriptor.FieldDescriptorProto
 }
 
+// IsReferenceType determines if the go-representation of the field
+// has one of the reference types: maps, slices, pointers to values.
+func (f Field) isReferenceType() bool {
+	if f.Message.File.proto2() {
+		return true
+	}
+	return proto3ReferenceTypes[f.GetType()]
+}
+
 // Parameter is a parameter provided in http requests
 type Parameter struct {
 	// FieldPath is a path to a proto field which this parameter is mapped to.
@@ -242,6 +251,12 @@ func (b Body) AssignableExpr(msgExpr string) string {
 	return b.FieldPath.AssignableExpr(msgExpr)
 }
 
+// ReferenceExpr returns an reference expression in Go to unmarshal something into.
+// It starts with "msgExpr", which is the go expression of the method request object.
+func (b Body) ReferenceExpr(msgExpr string) string {
+	return b.FieldPath.ReferenceExpr(msgExpr)
+}
+
 // FieldPath is a path to a field from a request message.
 type FieldPath []FieldPathComponent
 
@@ -272,17 +287,9 @@ type oneofParams struct {
 }
 
 var (
-	// TODO(yugui) "msg" becomes a pointer to a pointer so msg.{{.OneofName}} is not
-	// resolvable when MsgExpr is a poiter type.
-	// Need to distinguish value types from a reference types?
-	//
-	// Maybe it is better to let FieldPathComponent distinguish them than
-	// taking a pointer of the expr on json.Unmarshal() in the template.
-	// proto messages in json.Unamrshal is actually pointers to a pointer.
-	// It is not very optimal or reliable for other unmarshalers.
 	oneofTemplate = template.Must(template.New("oneof").Parse(`
 		func() *{{.ConcreteType}} {
-			msg := &{{.MsgExpr}}
+			msg := {{.MsgExpr}}
 			oneof := msg.{{.OneofName}}
 			if _, ok := oneof.(*{{.ConcreteType}}); oneof == nil || !ok {
 				oneof = new({{.ConcreteType}})
@@ -313,7 +320,7 @@ func (p FieldPath) AssignableExpr(msgExpr string) string {
 			// TODO(yugui) Use the package which the caller tempalte is dealing with.
 			// it will be necessary to correctly deal with oneof fields in messges in another packages than the service.
 			err := oneofTemplate.Execute(&buf, &oneofParams{
-				MsgExpr:   strings.Join(components, "."),
+				MsgExpr:   p[:i].ReferenceExpr(msgExpr),
 				OneofName: gogen.CamelCase(msg.GetOneofDecl()[*index].GetName()),
 				//ConcreteType: msg.GetName() + "_" + c.AssignableExpr(),
 				ConcreteType: msg.GoType(msg.File.GoPkg.Path) + "_" + c.AssignableExpr(),
@@ -332,6 +339,23 @@ func (p FieldPath) AssignableExpr(msgExpr string) string {
 	}
 
 	return strings.Join(components, ".")
+}
+
+func (p FieldPath) ReferenceExpr(msgExpr string) string {
+	l := len(p)
+	if l == 0 {
+		// msgExpr is a message type by definition.
+		// Thus it is always a reference type.
+		//return msgExpr
+
+		// no. it can be a LHS of a local variable.
+		return fmt.Sprintf("(&%s)", msgExpr)
+	}
+	e := p.AssignableExpr(msgExpr)
+	if p[l-1].Target.isReferenceType() {
+		return e
+	}
+	return fmt.Sprintf("&%s", e)
 }
 
 // FieldPathComponent is a path component in FieldPath
@@ -357,6 +381,8 @@ func (c FieldPathComponent) ValueExpr() string {
 }
 
 var (
+	// The table entries are ordered by enum numbers of the keys.
+
 	proto3ConvertFuncs = map[descriptor.FieldDescriptorProto_Type]string{
 		descriptor.FieldDescriptorProto_TYPE_DOUBLE:  "runtime.Float64",
 		descriptor.FieldDescriptorProto_TYPE_FLOAT:   "runtime.Float32",
@@ -400,6 +426,29 @@ var (
 		descriptor.FieldDescriptorProto_TYPE_SFIXED64: "runtime.Int64P",
 		descriptor.FieldDescriptorProto_TYPE_SINT32:   "runtime.Int32P",
 		descriptor.FieldDescriptorProto_TYPE_SINT64:   "runtime.Int64P",
+	}
+
+	proto3ReferenceTypes = map[descriptor.FieldDescriptorProto_Type]bool{
+		// Technically it is not necessary to have entries with false.
+		// but let it have them for ease of keeping the table comprehensive.
+		descriptor.FieldDescriptorProto_TYPE_DOUBLE:  false,
+		descriptor.FieldDescriptorProto_TYPE_FLOAT:   false,
+		descriptor.FieldDescriptorProto_TYPE_INT64:   false,
+		descriptor.FieldDescriptorProto_TYPE_UINT64:  false,
+		descriptor.FieldDescriptorProto_TYPE_INT32:   false,
+		descriptor.FieldDescriptorProto_TYPE_FIXED64: false,
+		descriptor.FieldDescriptorProto_TYPE_FIXED32: false,
+		descriptor.FieldDescriptorProto_TYPE_BOOL:    false,
+		descriptor.FieldDescriptorProto_TYPE_STRING:  false,
+		// FieldDescriptorProto_TYPE_GROUP
+		descriptor.FieldDescriptorProto_TYPE_MESSAGE:  true,
+		descriptor.FieldDescriptorProto_TYPE_BYTES:    true,
+		descriptor.FieldDescriptorProto_TYPE_UINT32:   false,
+		descriptor.FieldDescriptorProto_TYPE_ENUM:     false,
+		descriptor.FieldDescriptorProto_TYPE_SFIXED32: false,
+		descriptor.FieldDescriptorProto_TYPE_SFIXED64: false,
+		descriptor.FieldDescriptorProto_TYPE_SINT32:   false,
+		descriptor.FieldDescriptorProto_TYPE_SINT64:   false,
 	}
 
 	wellKnownTypeConv = map[string]string{
