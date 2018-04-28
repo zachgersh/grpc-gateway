@@ -72,7 +72,7 @@ func testABEClientCreate(t *testing.T, cl *abe.ABitOfEverythingServiceApi) {
 		Sfixed64Value:            "-4611686018427387904",
 		Sint32Value:              2147483647,
 		Sint64Value:              "4611686018427387903",
-		OneofString:              "bar",
+		OneofValueString:         "bar",
 		NonConventionalNameValue: "camelCase",
 	}
 	resp, _, err := cl.Create(
@@ -90,7 +90,7 @@ func testABEClientCreate(t *testing.T, cl *abe.ABitOfEverythingServiceApi) {
 		want.Sfixed64Value,
 		want.Sint32Value,
 		want.Sint64Value,
-		want.OneofString,
+		want.OneofValueString,
 		want.NonConventionalNameValue,
 	)
 	if err != nil {
@@ -137,7 +137,7 @@ func testABEClientCreateBody(t *testing.T, cl *abe.ABitOfEverythingServiceApi) {
 			},
 		},
 		RepeatedStringValue: []string{"a", "b", "c"},
-		OneofString:         "x",
+		OneofValueString:    "x",
 		MapValue:            map[string]abe.ExamplepbNumericEnum{
 			// "a": abe.ExamplepbNumericEnum_ONE,
 			// "b": abe.ExamplepbNumericEnum_ZERO,

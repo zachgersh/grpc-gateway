@@ -56,9 +56,11 @@ type ExamplepbABitOfEverything struct {
 
 	RepeatedStringValue []string `json:"repeated_string_value,omitempty"`
 
-	OneofEmpty ProtobufEmpty `json:"oneof_empty,omitempty"`
+	OneofValueNested ABitOfEverythingNested `json:"oneof_value_nested,omitempty"`
 
-	OneofString string `json:"oneof_string,omitempty"`
+	OneofValueString string `json:"oneof_value_string,omitempty"`
+
+	OneofNestedValue ABitOfEverythingNested `json:"oneof_nested_value,omitempty"`
 
 	MapValue map[string]ExamplepbNumericEnum `json:"map_value,omitempty"`
 

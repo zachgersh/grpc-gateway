@@ -34,8 +34,8 @@ func TestJSONPbMarshal(t *testing.T) {
 		},
 		Uint64Value: 0xFFFFFFFFFFFFFFFF,
 		EnumValue:   examplepb.NumericEnum_ONE,
-		OneofValue: &examplepb.ABitOfEverything_OneofString{
-			OneofString: "bar",
+		OneofValue: &examplepb.ABitOfEverything_OneofValueString{
+			OneofValueString: "bar",
 		},
 		MapValue: map[string]examplepb.NumericEnum{
 			"a": examplepb.NumericEnum_ONE,
@@ -204,8 +204,8 @@ func TestJSONPbUnmarshal(t *testing.T) {
 			},
 			Uint64Value: 0xFFFFFFFFFFFFFFFF,
 			EnumValue:   examplepb.NumericEnum_ONE,
-			OneofValue: &examplepb.ABitOfEverything_OneofString{
-				OneofString: "bar",
+			OneofValue: &examplepb.ABitOfEverything_OneofValueString{
+				OneofValueString: "bar",
 			},
 			MapValue: map[string]examplepb.NumericEnum{
 				"a": examplepb.NumericEnum_ONE,
@@ -252,8 +252,8 @@ func TestJSONPbEncoder(t *testing.T) {
 			},
 		},
 		Uint64Value: 0xFFFFFFFFFFFFFFFF,
-		OneofValue: &examplepb.ABitOfEverything_OneofString{
-			OneofString: "bar",
+		OneofValue: &examplepb.ABitOfEverything_OneofValueString{
+			OneofValueString: "bar",
 		},
 		MapValue: map[string]examplepb.NumericEnum{
 			"a": examplepb.NumericEnum_ONE,
@@ -424,8 +424,8 @@ func TestJSONPbDecoder(t *testing.T) {
 			},
 			Uint64Value: 0xFFFFFFFFFFFFFFFF,
 			EnumValue:   examplepb.NumericEnum_ONE,
-			OneofValue: &examplepb.ABitOfEverything_OneofString{
-				OneofString: "bar",
+			OneofValue: &examplepb.ABitOfEverything_OneofValueString{
+				OneofValueString: "bar",
 			},
 			MapValue: map[string]examplepb.NumericEnum{
 				"a": examplepb.NumericEnum_ONE,

@@ -125,6 +125,13 @@
             "default": "FALSE"
           },
           {
+            "name": "single_nested.terminal_value",
+            "description": "Nested nested_value = 16;.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "float_value",
             "in": "query",
             "required": false,
@@ -250,7 +257,73 @@
             }
           },
           {
-            "name": "oneof_string",
+            "name": "oneof_value_nested.name",
+            "description": "name is nested field.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oneof_value_nested.amount",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "oneof_value_nested.ok",
+            "description": " - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "FALSE",
+              "TRUE"
+            ],
+            "default": "FALSE"
+          },
+          {
+            "name": "oneof_value_nested.terminal_value",
+            "description": "Nested nested_value = 16;.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oneof_value_string",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oneof_nested_value.name",
+            "description": "name is nested field.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oneof_nested_value.amount",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "oneof_nested_value.ok",
+            "description": " - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "FALSE",
+              "TRUE"
+            ],
+            "default": "FALSE"
+          },
+          {
+            "name": "oneof_nested_value.terminal_value",
+            "description": "Nested nested_value = 16;.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -293,7 +366,7 @@
         }
       }
     },
-    "/v1/example/a_bit_of_everything/{float_value}/{double_value}/{int64_value}/separator/{uint64_value}/{int32_value}/{fixed64_value}/{fixed32_value}/{bool_value}/{string_value}/{uint32_value}/{sfixed32_value}/{sfixed64_value}/{sint32_value}/{sint64_value}/{oneof_string}/{nonConventionalNameValue}": {
+    "/v1/example/a_bit_of_everything/{float_value}/{double_value}/{int64_value}/separator/{uint64_value}/{int32_value}/{fixed64_value}/{fixed32_value}/{bool_value}/{string_value}/{uint32_value}/{sfixed32_value}/{sfixed64_value}/{sint32_value}/{sint64_value}/{oneof_value_string}/{nonConventionalNameValue}": {
       "post": {
         "operationId": "Create",
         "responses": {
@@ -403,7 +476,7 @@
             "format": "int64"
           },
           {
-            "name": "oneof_string",
+            "name": "oneof_value_string",
             "in": "path",
             "required": true,
             "type": "string"
@@ -631,7 +704,33 @@
         ]
       }
     },
-    "/v2/example/oneof/echo": {
+    "/v2/example/oneof_value_nested/echo": {
+      "post": {
+        "operationId": "DeepPathEcho4",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/examplepbABitOfEverything"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "ABitOfEverythingService"
+        ]
+      }
+    },
+    "/v2/example/oneof_value_string/echo": {
       "post": {
         "operationId": "DeepPathEcho2",
         "responses": {
@@ -752,6 +851,10 @@
         },
         "ok": {
           "$ref": "#/definitions/NestedDeepEnum"
+        },
+        "terminal_value": {
+          "type": "string",
+          "title": "Nested nested_value = 16;"
         }
       },
       "description": "Nested is nested type."
@@ -848,11 +951,14 @@
             "type": "string"
           }
         },
-        "oneof_empty": {
-          "$ref": "#/definitions/protobufEmpty"
+        "oneof_value_nested": {
+          "$ref": "#/definitions/ABitOfEverythingNested"
         },
-        "oneof_string": {
+        "oneof_value_string": {
           "type": "string"
+        },
+        "oneof_nested_value": {
+          "$ref": "#/definitions/ABitOfEverythingNested"
         },
         "map_value": {
           "type": "object",

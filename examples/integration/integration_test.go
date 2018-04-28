@@ -284,7 +284,7 @@ func testABECreate(t *testing.T, port int) {
 		Sfixed64Value:            -4611686018427387904,
 		Sint32Value:              2147483647,
 		Sint64Value:              4611686018427387903,
-		OneofValue:               &gw.ABitOfEverything_OneofString{oneofStr},
+		OneofValue:               &gw.ABitOfEverything_OneofValueString{oneofStr},
 		NonConventionalNameValue: "camelCase",
 	}
 	url := fmt.Sprintf("http://localhost:%d/v1/example/a_bit_of_everything/%f/%f/%d/separator/%d/%d/%d/%d/%v/%s/%d/%d/%d/%d/%d/%s/%s", port, want.FloatValue, want.DoubleValue, want.Int64Value, want.Uint64Value, want.Int32Value, want.Fixed64Value, want.Fixed32Value, want.BoolValue, want.StringValue, want.Uint32Value, want.Sfixed32Value, want.Sfixed64Value, want.Sint32Value, want.Sint64Value, oneofStr, want.NonConventionalNameValue)
@@ -349,8 +349,8 @@ func testABECreateBody(t *testing.T, port int) {
 			},
 		},
 		RepeatedStringValue: []string{"a", "b", "c"},
-		OneofValue: &gw.ABitOfEverything_OneofString{
-			OneofString: "x",
+		OneofValue: &gw.ABitOfEverything_OneofValueString{
+			OneofValueString: "x",
 		},
 		MapValue: map[string]gw.NumericEnum{
 			"a": gw.NumericEnum_ONE,
@@ -833,7 +833,7 @@ func TestOneofInBody(t *testing.T) {
 		payload = `"foo"`
 	)
 	want := gw.ABitOfEverything{
-		OneofValue: &gw.ABitOfEverything_OneofString{"foo"},
+		OneofValue: &gw.ABitOfEverything_OneofValueString{"foo"},
 	}
 
 	resp, err := http.Post(url, "application/json", strings.NewReader(payload))

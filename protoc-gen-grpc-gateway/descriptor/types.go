@@ -272,6 +272,14 @@ type oneofParams struct {
 }
 
 var (
+	// TODO(yugui) "msg" becomes a pointer to a pointer so msg.{{.OneofName}} is not
+	// resolvable when MsgExpr is a poiter type.
+	// Need to distinguish value types from a reference types?
+	//
+	// Maybe it is better to let FieldPathComponent distinguish them than
+	// taking a pointer of the expr on json.Unmarshal() in the template.
+	// proto messages in json.Unamrshal is actually pointers to a pointer.
+	// It is not very optimal or reliable for other unmarshalers.
 	oneofTemplate = template.Must(template.New("oneof").Parse(`
 		func() *{{.ConcreteType}} {
 			msg := &{{.MsgExpr}}
@@ -302,10 +310,13 @@ func (p FieldPath) AssignableExpr(msgExpr string) string {
 				msg   = c.Target.Message
 				buf   bytes.Buffer
 			)
+			// TODO(yugui) Use the package which the caller tempalte is dealing with.
+			// it will be necessary to correctly deal with oneof fields in messges in another packages than the service.
 			err := oneofTemplate.Execute(&buf, &oneofParams{
-				MsgExpr:      strings.Join(components, "."),
-				OneofName:    gogen.CamelCase(msg.GetOneofDecl()[*index].GetName()),
-				ConcreteType: msg.GetName() + "_" + c.AssignableExpr(),
+				MsgExpr:   strings.Join(components, "."),
+				OneofName: gogen.CamelCase(msg.GetOneofDecl()[*index].GetName()),
+				//ConcreteType: msg.GetName() + "_" + c.AssignableExpr(),
+				ConcreteType: msg.GoType(msg.File.GoPkg.Path) + "_" + c.AssignableExpr(),
 			})
 			if err != nil {
 				panic(fmt.Sprintf("cannot apply oneofTemplate: %v", err))
